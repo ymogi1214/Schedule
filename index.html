@@ -774,18 +774,25 @@ body {
 
       const eventEditForm = document.getElementById('eventEditForm');
       if (eventEditForm) {
-        eventEditForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const title = document.getElementById('editEventTitle').value.trim();
-          if (!title) return;
-          selected.title = title;
-          selected.date = document.getElementById('editEventDate').value;
-          selected.category = document.getElementById('editEventCat').value;
-          selected.singleDay = document.getElementById('editEventSingleDay').checked;
-          state.editingEventId = null;
-          await saveData();
-          render();
-        });
+eventEditForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const event = state.events.find(ev => ev.id === state.selectedId);
+    if (!event) return;
+
+    const title = document.getElementById('editEventTitle').value.trim();
+    if (!title) return;
+
+    event.title = title;
+    event.date = document.getElementById('editEventDate').value;
+    event.category = document.getElementById('editEventCat').value;
+    event.singleDay = document.getElementById('editEventSingleDay').checked;
+
+    state.editingEventId = null;
+
+    await saveData();
+    render();
+});
         document.getElementById('eventEditCancel').addEventListener('click', () => {
           state.editingEventId = null;
           render();
